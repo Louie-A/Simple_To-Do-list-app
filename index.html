@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif margin: 0;
+            padding: 20px;
+            background-color: #36393f;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #2f3136;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .taskInput,
+        .dateInput,
+        .timeInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            background-color: #40444b;
+            border: none;
+            color: #fff;
+            border-radius: 3px;
+        }
+
+        .taskInput::placeholder,
+        .dateInput::placeholder,
+        .timeInput::placeholder {
+            color: #8e9297;
+        }
+
+        .taskInput:focus,
+        .dateInput:focus,
+        .timeInput:focus {
+            outline: none;
+            box-shadow: 0 0 3px rgba(114, 137, 218, 0.6);
+        }
+
+        .addButton {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #7289da;
+            border: none;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .addButton:hover {
+            background-color: #677bc4;
+        }
+
+        .taskList {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .taskItem {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .taskItem--done {
+            background-color: #36393f;
+        }
+
+        .taskItem .taskName {
+            flex-grow: 1;
+            margin-right: 10px;
+            text-decoration: none;
+            background: linear-gradient(to right, #000, #000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .taskItem .dateTime {
+            margin-right: 10px;
+            color: #000000;
+        }
+
+        .taskItem .deleteButton {
+            cursor: pointer;
+            color: #000000;
+        }
+
+        .taskItem .taskName {
+            flex-grow: 1;
+            margin-right: 10px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .taskItem .taskName::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s;
+        }
+
+        .taskItem.taskItem--done .taskName::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .deleteButton {
+            cursor: pointer;
+            color: #4d0303;
+            margin-left: 10px;
+            padding: 5px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .deleteButton:hover {
+            background-color: #700303;
+            color: #fff;
+        }
+
+        .deleteButton i {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url("https://image.flaticon.com/icons/svg/1214/1214428.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .taskItem .checkbox {
+            margin-right: 10px;
+        }
+
+        .viewButtons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .viewButton {
+            background-color: #7289da;
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .viewButton:hover {
+            background-color: #677bc4;
+        }
+
+        .taskItem .taskName {
+            flex-grow: 1;
+            margin-right: 10px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .taskItem .taskName::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s;
+        }
+
+        .taskItem.taskItem--done .taskName::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .taskItem .dateTime {
+            margin-right: 10px;
+            color: #8e9297;
+        }
+
+        .taskItem.overdue .dateTime {
+            color: #ff0000;
+        }
+
+        .addButton {
+            --button-bg-color: #7289da;
+            --button-hover-bg-color: #273b85;
+            --button-text-color: #fff;
+            --button-border-radius: 3px;
+            --button-transition-duration: 0.3s;
+            --button-hover-gradient: linear-gradient(to right, var(--button-bg-color), var(--button-hover-bg-color));
+
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            color: var(--button-text-color);
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: var(--button-border-radius);
+            background-image: var(--button-hover-gradient);
+            transition: background-image var(--button-transition-duration);
+        }
+
+        .addButton:hover {
+            background-image: var(--button-bg-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+
+        <input type="text" id="taskInput" class="taskInput" placeholder="Add a task">
+        <input type="date" id="dateInput" class="dateInput">
+        <input type="time" id="timeInput" class="timeInput">
+        <button onclick="addTask()" class="addButton">Add Task</button>
+
+        <div class="viewButtons">
+            <button onclick="showAllTasks()" class="viewButton">All</button>
+            <button onclick="showOverdueTasks()" class="viewButton">Overdue</button>
+            <button onclick="showCompletedTasks()" class="viewButton">Completed</button>
+            <button onclick="showUnfinishedTasks()" class="viewButton">Unfinished</button>
+        </div>
+
+        <ul id="taskList" class="taskList"></ul>
+    </div>
+
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const dateInput = document.getElementById('dateInput');
+        const timeInput = document.getElementById('timeInput');
+        const taskList = document.getElementById('taskList');
+        let tasks = [];
+
+        function addTask() {
+            const taskName = taskInput.value.trim();
+            const taskDate = dateInput.value;
+            const taskTime = timeInput.value;
+
+            if (taskName !== '' && taskDate !== '' && taskTime !== '') {
+                const task = {
+                    name: taskName,
+                    date: taskDate,
+                    time: taskTime,
+                    done: false,
+                    color: generateRandomColor()
+                };
+
+                tasks.push(task);
+                renderTasks();
+                taskInput.value = '';
+                dateInput.value = '';
+                timeInput.value = '';
+            }
+        }
+
+        function toggleTaskStatus(index) {
+            tasks[index].done = !tasks[index].done;
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            renderTasks();
+        }
+
+        function showAllTasks() {
+            renderTasks();
+        }
+
+        function showOverdueTasks() {
+            const overdueTasks = tasks.filter(task => {
+                const now = new Date();
+                const taskDate = new Date(task.date + ' ' + task.time);
+                return !task.done && taskDate < now;
+            });
+
+            renderFilteredTasks(overdueTasks);
+        }
+
+        function showCompletedTasks() {
+            const completedTasks = tasks.filter(task => task.done);
+            renderFilteredTasks(completedTasks);
+        }
+
+        function showUnfinishedTasks() {
+            const unfinishedTasks = tasks.filter(task => !task.done);
+            renderFilteredTasks(unfinishedTasks);
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const taskItem = document.createElement('li');
+                taskItem.className = 'taskItem' + (task.done ? ' taskItem--done' : '') + (isTaskOverdue(task) ? ' overdue' : '');
+                taskItem.style.backgroundImage = `linear-gradient(to right, ${task.color.start}, ${task.color.end})`;
+                taskItem.innerHTML = `
+          <input type="checkbox" class="checkbox" onchange="toggleTaskStatus(${index})" ${task.done ? 'checked' : ''}>
+          <a href="#" class="taskName">${task.name}</a>
+          <span class="dateTime">${task.date} ${task.time}</span>
+          <span class="deleteButton" onclick="deleteTask(${index})">Delete</span>
+        `;
+                taskList.appendChild(taskItem);
+            });
+        }
+
+        function renderFilteredTasks(filteredTasks) {
+            taskList.innerHTML = '';
+            filteredTasks.forEach((task, index) => {
+                const taskItem = document.createElement('li');
+                taskItem.className = 'taskItem' + (task.done ? ' taskItem--done' : '') + (isTaskOverdue(task) ? ' overdue' : '');
+                taskItem.style.backgroundImage = `linear-gradient(to right, ${task.color.start}, ${task.color.end})`;
+                taskItem.innerHTML = `
+          <input type="checkbox" class="checkbox" onchange="toggleTaskStatus(${index})" ${task.done ? 'checked' : ''}>
+          <a href="#" class="taskName">${task.name}</a>
+          <span class="dateTime">${task.date} ${task.time}</span>
+          <span class="deleteButton" onclick="deleteTask(${index})">Delete</span>
+        `;
+                taskList.appendChild(taskItem);
+            });
+        }
+
+        function generateRandomColor() {
+            const startColor = getRandomColor();
+            const endColor = getRandomColor();
+            return { start: startColor, end: endColor };
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function isTaskOverdue(task) {
+            const now = new Date();
+            const taskDate = new Date(task.date + ' ' + task.time);
+            return !task.done && taskDate < now;
+        }
+    </script>
+</body>
+
+</html>
